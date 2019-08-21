@@ -1,5 +1,5 @@
 {
-  "name": "winston",
+  "name": "@janecorp/winston-safe",
   "description": "A logger for just about everything.",
   "version": "3.2.1",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>",
