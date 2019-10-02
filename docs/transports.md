@@ -40,14 +40,17 @@ there are additional transports written by
   * [Datadog](#datadog-transport)
   * [Elasticsearch](#elasticsearch-transport)
   * [FastFileRotate](#fastfilerotate-transport)
+  * [Google BigQuery](#google-bigquery)
   * [Google Stackdriver Logging](#google-stackdriver-transport)
   * [Graylog2](#graylog2-transport)
+  * [Humio](#humio-transport)
   * [LogDNA](#logdna-transport)
   * [Logsene](#logsene-transport) (including Log-Alerts and Anomaly Detection)
   * [Logz.io](#logzio-transport)
   * [Mail](#mail-transport)
   * [Newrelic](#newrelic-transport) (errors only)
   * [Papertrail](#papertrail-transport)
+  * [PostgresQL](#postgresql-transport)
   * [Pusher](#pusher-transport)
   * [Sentry](#sentry-transport)
   * [SimpleDB](#simpledb-transport)
@@ -436,6 +439,32 @@ Options:
 * __ddsource__: The technology from which the logs originated
 * __ddtags__: Metadata assoicated with the logs
 
+### Google BigQuery
+[winston-bigquery][42] is a transport for Google BigQuery.
+
+```js
+import {WinstonBigQuery} from 'winston-bigquery';
+import winston, {format} from 'winston';
+
+const logger = winston.createLogger({
+	transports: [
+		new WinstonBigQuery({
+			tableId: 'winston_logs',
+			datasetId: 'logs'
+		})
+	]
+});
+```
+
+The Google BigQuery takes the following options:
+
+* __datasetId__   	      	    : Your dataset name [required]
+* __tableId__     	  	    : Table name in the datase [required]
+* __applicationCredentials__    : a path to local service worker (useful in dev env) [Optional]
+
+**Pay Attention**, since BQ, unlike some other products, is not a "schema-less" you will need to build the schema in advance.
+read more on the topic on [github][42] or [npmjs.com][43]
+
 ### Google Stackdriver Transport
 
 [@google-cloud/logging-winston][29] provides a transport to relay your log messages to [Stackdriver Logging][30].
@@ -495,6 +524,23 @@ const logger = winston.createLogger({
     })
   ]
 })
+```
+
+### Humio Transport
+
+[humio-winston][44] is a transport for sending logs to Humio:
+
+``` js
+const winston = require('winston');
+const HumioTransport = require('humio-winston');
+
+const logger = winston.createLogger({
+  transports: [
+    new HumioTransport({
+      ingestToken: '<YOUR HUMIO INGEST TOKEN>',
+    }),
+  ],
+});
 ```
 
 ### LogDNA Transport
@@ -623,6 +669,10 @@ The Papertrail transport connects to a [PapertrailApp log destination](https://p
 * __logFormat:__ a log formatting function with the signature `function(level, message)`, which allows custom formatting of the level or message prior to delivery
 
 *Metadata:* Logged as a native JSON object to the 'meta' attribute of the item.
+
+### PostgresQL Transport
+
+[@pauleliet/winston-pg-native](https://github.com/petpano/winston-pg-native) is a PostgresQL transport supporting Winston 3.X.
 
 ### Pusher Transport
 [winston-pusher](https://github.com/meletisf/winston-pusher) is a Pusher transport.
@@ -909,3 +959,6 @@ That's why we say it's a logger for just about everything
 [39]: https://github.com/TheAppleFreak/winston-slack-webhook-transport
 [40]: https://github.com/punkish/winston-better-sqlite3
 [41]: https://github.com/aandrewww/winston-transport-sentry-node
+[42]: https://github.com/kaminskypavel/winston-bigquery
+[43]: https://www.npmjs.com/package/winston-bigquery
+[44]: https://github.com/Quintinity/humio-winston
